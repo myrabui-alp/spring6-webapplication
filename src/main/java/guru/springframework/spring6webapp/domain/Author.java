@@ -2,7 +2,7 @@ package guru.springframework.spring6webapp.domain;
 
 import jakarta.persistence.*;
 
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -10,16 +10,20 @@ import java.util.Set;
  */
 @Entity
 public class Author {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private  String firstName;
+    private String firstName;
     private String lastName;
+
     @ManyToMany(mappedBy = "authors")
-    private Set<Book> books;
+    private Set<Book> books = new HashSet<>();
+
     public Set<Book> getBooks() {
         return books;
     }
+
     public void setBooks(Set<Book> books) {
         this.books = books;
     }
@@ -61,15 +65,18 @@ public class Author {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Author)) return false;
 
         Author author = (Author) o;
 
-        return Objects.equals(id, author.id);
+        return getId() != null ? getId().equals(author.getId()) : author.getId() == null;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return getId() != null ? getId().hashCode() : 0;
     }
 }
+
+
+
